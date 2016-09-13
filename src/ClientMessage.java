@@ -6,19 +6,17 @@ import java.io.*;
 import org.AMTL_Matrix.*;
 
 class ClientMessage implements Serializable{
-	//private int blasID;
+	
 	private int error;
 	private int dim;
-	private int Blas; // Blas ID
+	private int Blas;
 
 	private AMTL_Matrix A;
-	//private Matrix B;
 
-	//private double[] vector;
 
+	// Constructor
 	public ClientMessage(int dim, int Blas){
 		this.dim = dim;
-		//this.blasID = 0;
 		this.error = 0;
 		this.Blas = Blas;
 		

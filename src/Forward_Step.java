@@ -10,6 +10,7 @@ public class Forward_Step {
 	
 	private double StepSize;
 	
+	// Constructor
 	public Forward_Step(AMTL_Matrix A, AMTL_Matrix b, double StepSize){
 		
 		this.A = new AMTL_Matrix(A);

@@ -16,16 +16,24 @@ public class Server {
 	
 	public static void main(String[] args){
 				
+		// Read the addresses of possible clients
 		ReadAddress reader = new ReadAddress("/home/inci/Dropbox/AMTL_Java_Inci/address.txt");
 		
 		ArrayList<String> addressList = reader.readAddress();
 		HashMap<String, BigInteger> addressSearch = reader.convertHash(addressList);
 		
+		// index of the client ip address in the address list
 		int index = 0;
+		
+		/* BlasID 0: ejml
+		 * BlasID 1: ujmp
+		 * BlasID 2: jama
+		 * BlasID 3: jblas
+		*/
 		
         int Blas = 0;
 		
-		//Initialization
+		//Initialization of the model matrix
 		DenseMatrix64F W_load;
 		try{
 			W_load = MatrixIO.loadCSV("/home/inci/workspace/W.csv");
@@ -35,9 +43,11 @@ public class Server {
 		
 		AMTL_Matrix W = new AMTL_Matrix(W_load,Blas);
 		
+		// Dimension of the model vector
 		int dim = W.NumRows;
 		 
 		
+		// Parsing command line arguments
 		double StepSize = 0.5;
 		if (args.length > 0) {
 		    try {

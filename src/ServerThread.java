@@ -43,8 +43,6 @@ public class ServerThread implements Callable<AMTL_Matrix>{
 		// Client message was initialized in Client.java before. It has an initial vector which is 
 		// the column of the model matrix that server needs to send back.
 		clientMsg = (ClientMessage)ois.readObject( );
-		
-		//System.out.println(socket.getInputStream().available());
 
 		
 		if(index == -1){
@@ -85,7 +83,6 @@ public class ServerThread implements Callable<AMTL_Matrix>{
 		// Serialize the clientMsg
 		ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 		oos.writeObject(clientMsg);
-		//System.out.println(socket.getOutputStream().toString());
 		oos.flush();
 		
 		// Close the socket one iteration is done.

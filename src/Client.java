@@ -22,7 +22,9 @@ public class Client {
 		//BufferedReader br;
 		
 
-		int ITER = 10;
+		int ITER = 10; // Number of iterations 
+		
+		// Getting input arguments from command line
 		if (args.length > 0) {
 		    try {
 		        ITER = Integer.parseInt(args[0]);
@@ -42,8 +44,16 @@ public class Client {
 		    }
 		}
 		
+		// Blas is the ID that tells us which BLAS library we would like to use.
+		/* BlasID 0: ejml
+		 * BlasID 1: ujmp
+		 * BlasID 2: jama
+		 * BlasID 3: jblas
+		*/
 		int Blas = 0;
 		
+		// Loading data matrix A and the response b here.
+		// I assume that the objective is square loss. ||Ax-b||^2
 		DenseMatrix64F A_load;
 		
 		try{
@@ -64,22 +74,25 @@ public class Client {
 		
 		AMTL_Matrix b = new AMTL_Matrix(b_load,Blas);
 		
+		// Dimension of the feature vectors
 		int dim = A.NumColumns;
 		double ARock_StepSize = 0.1;
 		
+		// Initializing some vectors to use in forward step
 		AMTL_Matrix A_vec = new AMTL_Matrix(dim, 1, Blas);
 		AMTL_Matrix A_vec_latest = new AMTL_Matrix(dim, 1, Blas);
-	
 		
+		// Creating an object of ClientMessage class. 
 		ClientMessage clientMsg = new ClientMessage(dim,Blas);
 
+		// This is a standard way to keep the time.
 		Date start_time = null;
 		
 		try{
 			// Set the socket
 			InetAddress serverHost = InetAddress.getByName("localhost");
 			
-			
+			// Server port number should be same as the number defined in Server.java
 			int serverPort = 3457;
 			Socket clientSocket = null;
 			
@@ -90,29 +103,32 @@ public class Client {
 			for(int j = 0; j < ITER; j++){
 				System.out.println("ITER: " + j);
 
-				// In every iteration a new socket object is created because at the end 
-				// if ServerThread we are closing the socket.
+				// In every iteration a new socket object is created.  
+				// I will check whether we need to create a new object in each iteration
+				// or we can create one outside the loop once.
 				clientSocket = new Socket(serverHost, serverPort);
 				ObjectOutputStream oos;
 				ObjectInputStream ois;
 				
 				// Send a message (a vector) to server and this unblock the accept() method and 
 				// invokes a communication. 
+				// Serializing the vector.
 				oos = new ObjectOutputStream(clientSocket.getOutputStream());
 				oos.writeObject(clientMsg);
 				oos.flush();
 
 				// Get the message at the end of the operation at server's end.
-				//System.out.println(clientSocket.getInputStream().available());
 				ois = new ObjectInputStream(clientSocket.getInputStream());
 				clientMsg = (ClientMessage)ois.readObject( );
 				
 				if(clientMsg.getError() == 0){
 					// Operation needs to be done at client end.
+					
+					//Forward step (Gradient Update)
 					Forward_Step grad = new Forward_Step(A, b, StepSize);
 					A_vec = grad.Gradient_Update(clientMsg.getVec());
 					
-					
+					// Arock update
 					A_vec_latest = clientMsg.getVec();
 					
 					AMTL_Matrix result = new AMTL_Matrix(A_vec.NumRows,A_vec.NumColumns,A_vec.BlasID);
@@ -146,7 +162,7 @@ public class Client {
 				ois.close();
 			}
 			
-			// After iterations are done close the socket.
+			// After iterations are done, close the socket.
 			clientSocket.close();
 			
 		}catch(Exception e){
