@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/home/inci/Dropbox/AMTL_Java_Inci/AMTL/src/AMTL_Matrix_Jar.jar"/>
+	<classpathentry kind="lib" path="/home/inci/Dropbox/AMTL_Java_Inci/AMTL/src/ejml.jar"/>
+	<classpathentry kind="lib" path="/home/inci/Dropbox/AMTL_Java_Inci/AMTL/src/jama-1.0.3.jar"/>
+	<classpathentry kind="lib" path="/home/inci/Dropbox/AMTL_Java_Inci/AMTL/src/jblas-1.2.4.jar"/>
+	<classpathentry kind="lib" path="/home/inci/Dropbox/AMTL_Java_Inci/AMTL/src/ujmp.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
