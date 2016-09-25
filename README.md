@@ -5,7 +5,7 @@ Abstract—Many real-world machine learning applications involve many learning t
 
 # How to Use the Java Code
 
-There are two main java files which are Client_Square_Loss.java and Server_ProxTrace.java. Server_ProxTrace should be run at the central node end and t should read possible client IP addresses from a text file. Client_Square_Loss should be run at the client side and the server's IP address should be specified. 
+There are two main java files which are Client_Square_Loss.java and Server_ProxTrace.java in the project. Server_ProxTrace should be run at the central node first and it should read the possible client IP addresses from a text file. Client_Square_Loss should be run at the client side after server is started and the server's IP address should be specified. 
 
 First, Server_ProxTrace.java should be run to make the server listen posibble clients. Whenever Client_Square_Loss is run, server first checks wheather the client has a valid address or not. If the client is valid, communication starts. 
 
