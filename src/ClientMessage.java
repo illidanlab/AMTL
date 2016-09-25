@@ -4,6 +4,8 @@ import java.io.*;
 //import java.util.Random;
 
 import org.AMTL_Matrix.*;
+import org.AMTL_Matrix.MatrixOps.MatrixOps;
+import org.AMTL_Matrix.Norms.Norms;
 
 class ClientMessage implements Serializable{
 	
@@ -21,6 +23,7 @@ class ClientMessage implements Serializable{
 		this.Blas = Blas;
 		
 		this.A = new AMTL_Matrix(this.dim, 1, this.Blas);//RandomMatrices.createRandom(this.ROW, (int)1, new Random());
+		
 
 	}
 	
@@ -43,5 +46,6 @@ class ClientMessage implements Serializable{
 			A.setDouble(i, 0, a.getDouble(i,0));
 		}
 	}
-
+	
+	
 }

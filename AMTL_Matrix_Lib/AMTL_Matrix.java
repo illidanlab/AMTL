@@ -9,11 +9,14 @@ package org.AMTL_Matrix;
 import java.io.Serializable;
 
 import org.ejml.data.*;
+import org.ejml.ops.CommonOps;
 
 import org.ujmp.core.*;
 
 
 import org.jblas.DoubleMatrix;
+
+import org.AMTL_Matrix.MatrixOps.*;
 
 
 
@@ -123,6 +126,63 @@ public class AMTL_Matrix implements Serializable{
 		return NumColumns;
 	}
 	
+	public AMTL_Matrix getSubMatrix(int[] rows, int[] columns){
+		
+		AMTL_Matrix SubMatrix;
+		
+		if(this.BlasID == 0){
+			
+			if(rows.length == 1){	
+				DenseMatrix64F vector = CommonOps.extract((DenseMatrix64F) this.M, rows[0], (rows[0]+1), 0, columns.length);
+				CommonOps.transpose(vector);
+				SubMatrix = new AMTL_Matrix(vector, 0);
+			} else{
+				DenseMatrix64F vector = CommonOps.extract((DenseMatrix64F) this.M, 0, rows.length, columns[0], (columns[0]+1));
+				SubMatrix = new AMTL_Matrix(vector, 0);
+			}
+			
+		} else if(this.BlasID == 1){
+			if(rows.length == 1){
+				SubMatrix = new AMTL_Matrix(columns.length, 1, 1);
+				long[] coordinates = new long[]{rows[0],0};
+				for(int i = 0; i<columns.length; i++){
+					coordinates[1] = i;
+					SubMatrix.setDouble(i, 0, ((Matrix) this.M).getAsDouble(coordinates));
+				}
+			} else {
+				SubMatrix = new AMTL_Matrix(rows.length, 1, 1);
+				long[] coordinates = new long[]{0,columns[0]};
+				for(int i = 0; i<rows.length; i++){
+					coordinates[0] = i;
+					SubMatrix.setDouble(i, 0, ((Matrix) this.M).getAsDouble(coordinates));
+				}
+			}
+		} else if(this.BlasID == 2){
+			if(rows.length == 1){
+				Jama.Matrix sub  = ((Jama.Matrix) this.M).getMatrix(rows, columns);
+				SubMatrix = new AMTL_Matrix(sub,2);	
+				MatrixOps.Transpose(SubMatrix);
+			} else{
+				Jama.Matrix sub  = ((Jama.Matrix) this.M).getMatrix(rows, columns);
+				SubMatrix = new AMTL_Matrix(sub,2);	
+			}
+			
+		} else{
+			if(rows.length == 1){
+				DoubleMatrix sub = ((DoubleMatrix) this.M).getRow(rows[0]);
+				sub = sub.transpose();
+				SubMatrix = new AMTL_Matrix(sub,3);
+			} else{
+				DoubleMatrix sub = ((DoubleMatrix) this.M).getColumn(columns[0]);
+				SubMatrix = new AMTL_Matrix(sub,3);
+			}
+		}
+		
+		return SubMatrix;
+		
+	}
+
+	
 	public double getDouble(int row, int column){
 		
 		if(row > this.NumRows){
@@ -178,4 +238,3 @@ public class AMTL_Matrix implements Serializable{
 
 
 }
-
